@@ -1,10 +1,13 @@
-// src/config/db.ts
-
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+// Load environment variables from .env file
+dotenv.config();
 
 const connectDB = async () => {
   try {
-    const uri = "mongodb://localhost:27017/fashion_db";
+    // Lấy URI từ biến môi trường
+    const uri = process.env.MONGO_URI as string;
     const options = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
