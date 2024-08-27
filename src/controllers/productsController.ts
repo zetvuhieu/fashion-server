@@ -71,3 +71,27 @@ export const getProductById = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Could not fetch product" });
   }
 };
+
+// Tìm kiếm sản phẩm theo tên
+export const searchProductsByName = async (req: Request, res: Response) => {
+  try {
+    const name = req.query.name as string;
+
+    // Kiểm tra tham số tên
+    if (!name || typeof name !== "string") {
+      return res.status(400).json({
+        error: "Name query parameter is required and must be a string",
+      });
+    }
+
+    // Tìm kiếm sản phẩm theo tên
+    const products: IProduct[] = await Product.find({
+      name: { $regex: name, $options: "i" }, // 'i' để tìm kiếm không phân biệt hoa thường
+    });
+
+    res.json(products);
+  } catch (error) {
+    console.error("Error searching products by name:", error.message);
+    res.status(500).json({ error: "Could not search products by name" });
+  }
+};
